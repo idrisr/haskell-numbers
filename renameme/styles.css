@@ -1,0 +1,15 @@
+body {
+    font-family: Arial, sans-serif; /* Set a readable font */
+    line-height: 1.6; /* Improve readability with line height */
+    margin: 0;
+    padding: 20px; /* Add some padding around the content */
+}
+
+main {
+    max-width: 80ch; /* Set the maximum width to approximately 80 characters */
+    margin: 0 auto; /* Center the content */
+    padding: 20px; /* Add padding inside the main content area */
+    background-color: #f9f9f9; /* Optional: light background for contrast */
+    border-radius: 8px; /* Optional: rounded corners */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: subtle shadow */
+} 

@@ -1,0 +1,12 @@
+,           Bool, Char, Complex, Double, Float, Int, Integer, Ordering, Word, Ratio
+Bounded,    1,    1,    ,        ,       ,      1,   ,        1,        1,
+Enum,       1,    1,    ,        1,      1,     1,   1,       1,        1,
+Eq,         1,    1,    1,       1,      1,     1,   1,       1,        1,
+Floating,   ,     ,     1,       1,      1,     ,    ,        ,         ,
+Fractional, ,     ,     1,       1,      1,     ,    ,        ,         ,
+Integral,   ,     ,     ,        ,       ,      1,   1,       ,         1,
+Num,        ,     ,     1,       1,      1,     1,   1,       ,         1,
+Ord,        1,    1,    ,        1,      1,     1,   1,       1,        1,
+Real,       ,     ,     ,        1,      1,     1,   1,       ,         1,
+RealFloat,  ,     ,     1,       1,      1,     ,    ,        ,         ,
+RealFrac,   ,     ,     ,        1,      1,     ,    ,        ,         ,

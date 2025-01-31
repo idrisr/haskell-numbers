@@ -1,0 +1,228 @@
+\documentclass[openany, 11pt]{book}
+\usepackage[inkscapeformat=png]{svg}
+
+\input{preamble}
+\title{Haskell Numbers}
+\author{Idris}
+\date{December 2024}
+
+\begin{document}
+\maketitle{}
+\tableofcontents
+\tcblistof[\section]{definition}{List of Definitions}
+\tcblistof[\section]{intuition}{List of Intuitions}
+% \listoffigures
+% \listoftables
+
+\chapter{Type Classes}
+\section{Definitions}
+\begin{definition}{Background}{}
+	\begin{enumerate}[label = {(\arabic*)}]
+		\item class hierarchy is mostly historical
+		\item if redone now, would be done in more systematic way
+		\item but cant be done, would break a ton of code
+	\end{enumerate}
+\end{definition}
+
+\begin{definition}{Type Classes}{}
+	\begin{multicols}{2}
+		\begin{enumerate}[label = {(\arabic*)}]
+			\item Bounded
+			\item Enum
+			\item Eq
+			\item Floating
+			\item Fractional
+			\item Integral
+			\item Num
+			\item Ord
+			\item Real
+			\item RealFloat
+			\item RealFrac
+		\end{enumerate}
+	\end{multicols}
+\end{definition}
+
+\begin{definition}{Types}{}
+	\begin{multicols}{2}
+		\begin{enumerate}[label = {(\arabic*)}]
+			\item Bool
+			\item Char
+			\item Complex
+			\item Double
+			\item Float
+			\item Int
+			\item Integer
+			\item Ordering
+			\item Word
+		\end{enumerate}
+	\end{multicols}
+\end{definition}
+
+
+
+\begin{intuition}{Real}{}
+	\begin{haskell}{}
+type Real :: * -> Constraint
+class (Num a, Ord a) => Real a where
+    toRational :: a -> Rational
+{-# MINIMAL toRational #-}
+instance Real Double -- Defined in 'GHC.Float’
+instance Real Float -- Defined in 'GHC.Float’
+instance Real Int -- Defined in 'GHC.Real’
+instance Real Integer -- Defined in 'GHC.Real’
+instance Real Word -- Defined in 'GHC.Real’
+    \end{haskell}
+
+\end{intuition}
+
+\begin{intuition}{Bounded}{}
+	Max and Min, but not necessarily any order.
+	\begin{haskell}{}
+class Bounded a where
+    minBound :: a
+    maxBound :: a
+    \end{haskell}
+\end{intuition}
+
+\begin{intuition}{Enum}{}
+	\hask{pred} and \hask{succ}, but not necessarily a max or min.
+\end{intuition}
+
+\begin{intuition}{Integral}{}
+	It's a ring.
+	\begin{haskell}{}
+class (Real a, Enum a) => Integral a where
+    quot :: a -> a -> a
+    rem :: a -> a -> a
+    div :: a -> a -> a
+    mod :: a -> a -> a
+    quotRem :: a -> a -> (a, a)
+    divMod :: a -> a -> (a, a)
+    toInteger :: a -> Integer
+    \end{haskell}
+\end{intuition}
+
+\begin{intuition}{RealFrac}{}
+	Gives you rounding. It's like a way to introduce Integral.
+	Basically you go from \hask{RealFrac} to \hask{Integral}.
+	\begin{haskell}{}
+type RealFrac :: * -> Constraint
+
+class (Real a, Fractional a) => RealFrac a where
+    properFraction :: Integral b => a -> (b, a)
+    truncate :: Integral b => a -> b
+    round :: Integral b => a -> b
+    ceiling :: Integral b => a -> b
+    floor :: Integral b => a -> b
+    {-# MINIMAL properFraction #-}
+
+instance RealFrac Double -- Defined in 'GHC.Float’
+instance RealFrac Float -- Defined in 'GHC.Float’
+\end{haskell}
+\end{intuition}
+
+\begin{intuition}{Fractional}{}
+	So since it starts with Num, then gets inverse, its a \ldots group?!
+	\begin{haskell}{}
+class Num a => Fractional a where
+    (/) :: a -> a -> a
+    recip :: a -> a
+    fromRational :: Rational -> a
+    {-# MINIMAL fromRational, (recip | (/)) #-}
+
+instance Fractional Double -- Defined in 'GHC.Float’
+instance Fractional Float -- Defined in 'GHC.Float’
+instance RealFloat a => Fractional (Complex a)
+\end{haskell}
+\end{intuition}
+
+\begin{intuition}{Floating}{}
+	Trigonometric like functions. Notice that these are all a to a, so these
+	types have to respect closure.
+	\begin{align*}
+		\cos, \sin, \tan, \pi, \sqrt{}
+	\end{align*}
+	\begin{haskell}{}
+class Fractional a => Floating a where
+    pi :: a
+    exp :: a -> a
+    log :: a -> a
+    sqrt :: a -> a
+    (**) :: a -> a -> a
+    logBase :: a -> a -> a
+    ...
+    \end{haskell}
+\end{intuition}
+
+\begin{intuition}{RealFloat}{}
+	Allows you to separate float in radix and the other thing?
+
+	\begin{haskell}{}
+class (RealFrac a, Floating a) => RealFloat a where
+  floatRadix :: a -> Integer
+  floatDigits :: a -> Int
+  floatRange :: a -> (Int, Int)
+  decodeFloat :: a -> (Integer, Int)
+  encodeFloat :: Integer -> Int -> a
+  exponent :: a -> Int
+  significand :: a -> a
+  scaleFloat :: Int -> a -> a
+  isNaN :: a -> Bool
+  isInfinite :: a -> Bool
+  isDenormalized :: a -> Bool
+  isNegativeZero :: a -> Bool
+  isIEEE :: a -> Bool
+  atan2 :: a -> a -> a
+\end{haskell}
+\end{intuition}
+
+\begin{intuition}{Complex}{}
+	Has kind \texttt{Type $\rightarrow$ Type}.
+	\begin{haskell}{}
+% type Complex :: * -> *
+% data Complex a = !a :+ !a
+% -- Defined in 'Data.Complex’
+% instance RealFloat a => Floating (Complex a)
+  % -- Defined in 'Data.Complex’
+% instance Foldable Complex -- Defined in 'Data.Complex’
+% instance Traversable Complex -- Defined in 'Data.Complex’
+% instance Read a => Read (Complex a) -- Defined in 'Data.Complex’
+% instance RealFloat a => Fractional (Complex a)
+  % -- Defined in 'Data.Complex’
+% instance RealFloat a => Num (Complex a)
+  % -- Defined in 'Data.Complex’
+% instance Show a => Show (Complex a) -- Defined in 'Data.Complex’
+% instance Applicative Complex -- Defined in 'Data.Complex’
+% instance Functor Complex -- Defined in 'Data.Complex’
+% instance Monad Complex -- Defined in 'Data.Complex’
+% instance Eq a => Eq (Complex a) -- Defined in 'Data.Complex’
+\end{haskell}
+\end{intuition}
+
+\section{Kinds}
+
+\csvautotabularray[table centered]
+{number-types.csv}
+[
+	tall,
+	caption = {Types and Typeclasses},
+]
+[
+	row{odd}
+		= {CaribbeanBlue!15},
+	row{1}
+		= {CaribbeanBlue!35,
+			font=\bfseries, preto=\MakeUppercase}
+]
+
+
+\begin{figure}[H]
+	\begin{center}
+		% \includesvg{classes.svg}
+	\end{center}
+	\caption{Number Class Hierarchy}
+\end{figure}
+
+% \printbibliography{}
+% \printindex{}
+\end{document}

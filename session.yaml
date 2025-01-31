@@ -1,0 +1,20 @@
+session_name: haskell-numbers
+windows:
+  - window_name: haskell
+    layout: main-vertical
+    panes:
+      - shell_command:
+        - cd /home/hippoid/fun/haskell-numbers
+    options:
+      main-pane-width: 80
+
+  - window_name: latex
+    layout: tiled
+    shell_command_before:
+      - cd /home/hippoid/fun/haskell-numbers/doc && git status
+
+  - window_name: server
+    layout: tiled
+    shell_command:
+      - cd /home/hippoid/fun/haskell-numbers/renameme
+      - cabal run web -- server

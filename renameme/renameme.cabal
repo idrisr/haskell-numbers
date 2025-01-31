@@ -1,0 +1,30 @@
+cabal-version: 3.0
+name:          renameme
+version:       0.1.0.0
+license:       MIT
+build-type:    Simple
+
+common warnings
+  ghc-options:        -Wall
+  default-language:   Haskell2010
+  default-extensions: NoStarIsType
+
+executable web
+  import:         warnings
+  main-is:        Site.hs
+  build-depends:
+    , base    ^>=4.18.2.1
+    , hakyll
+    , pandoc
+
+  hs-source-dirs: .
+
+executable square
+  main-is:          Square.hs
+  build-depends:    base >=4.7 && <5
+  default-language: Haskell2010
+
+executable num
+  main-is:          NumInstance.hs
+  build-depends:    base >=4.7 && <5
+  default-language: Haskell2010

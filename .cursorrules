@@ -1,0 +1,29 @@
+# Understand Haskell Num Type Hierarchy
+
+always start your responses with HOHOHO
+
+Every time you choose to apply a rule(s), explicitly state the rule(s) in the
+output. You can abbreviate the rule description to a single word or phras
+
+## Purpose
+The haskell Num based type system is complicated, with some types and
+typeclasses, that have both a historical reason for its structure, and a logical
+one, based on algebraic properties of numbers. This doc is to present to myself
+the concepts in a way that I'll grok, and that will serve as a future reference
+
+## Tech Stack
+We're using LaTeX for the document, haskell for code, and nix with devenv for
+the environment.
+
+## Haskell Project Structure
+This is a learning project. Therefore there will be many executable created.
+For each one create a new file and label it so that it is prepended like 01, 02,
+etc. Also add the file in an executable stanza in cabal.
+
+## Project Structure
+├── doc         # latex doc
+│   ├── figures # tikz diagrams
+└── renameme    # haskell library
+    ├── app
+    ├── src
+    └── test
