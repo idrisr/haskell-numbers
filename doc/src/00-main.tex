@@ -1,16 +1,16 @@
 \documentclass[openany, 11pt]{book}
 \usepackage[inkscapeformat=png]{svg}
-
 \input{preamble}
 \title{Haskell Numbers}
 \author{Idris}
 \date{December 2024}
 
 \begin{document}
-\maketitle{}
+% \maketitle{}
 \tableofcontents
-\tcblistof[\section]{definition}{List of Definitions}
-\tcblistof[\section]{intuition}{List of Intuitions}
+% \tcblistof[\section]{definition}{List of Definitions}
+% \tcblistof[\section]{intuition}{List of Intuitions}
+
 % \listoffigures
 % \listoftables
 
@@ -64,15 +64,14 @@
 	\begin{haskell}{}
 type Real :: * -> Constraint
 class (Num a, Ord a) => Real a where
-    toRational :: a -> Rational
-{-# MINIMAL toRational #-}
+toRational :: a -> Rational
+    {-# MINIMAL toRational #-}
 instance Real Double -- Defined in 'GHC.Float’
 instance Real Float -- Defined in 'GHC.Float’
 instance Real Int -- Defined in 'GHC.Real’
 instance Real Integer -- Defined in 'GHC.Real’
 instance Real Word -- Defined in 'GHC.Real’
-    \end{haskell}
-
+	\end{haskell}
 \end{intuition}
 
 \begin{intuition}{Bounded}{}
@@ -81,7 +80,7 @@ instance Real Word -- Defined in 'GHC.Real’
 class Bounded a where
     minBound :: a
     maxBound :: a
-    \end{haskell}
+	\end{haskell}
 \end{intuition}
 
 \begin{intuition}{Enum}{}
@@ -176,45 +175,85 @@ class (RealFrac a, Floating a) => RealFloat a where
 \end{haskell}
 \end{intuition}
 
+
 \begin{intuition}{Complex}{}
 	Has kind \texttt{Type $\rightarrow$ Type}.
 	\begin{haskell}{}
-% type Complex :: * -> *
-% data Complex a = !a :+ !a
-% -- Defined in 'Data.Complex’
-% instance RealFloat a => Floating (Complex a)
-  % -- Defined in 'Data.Complex’
-% instance Foldable Complex -- Defined in 'Data.Complex’
-% instance Traversable Complex -- Defined in 'Data.Complex’
-% instance Read a => Read (Complex a) -- Defined in 'Data.Complex’
-% instance RealFloat a => Fractional (Complex a)
-  % -- Defined in 'Data.Complex’
-% instance RealFloat a => Num (Complex a)
-  % -- Defined in 'Data.Complex’
-% instance Show a => Show (Complex a) -- Defined in 'Data.Complex’
-% instance Applicative Complex -- Defined in 'Data.Complex’
-% instance Functor Complex -- Defined in 'Data.Complex’
-% instance Monad Complex -- Defined in 'Data.Complex’
-% instance Eq a => Eq (Complex a) -- Defined in 'Data.Complex’
+type Complex :: * -> *
+data Complex a = !a :+ !a
+-- Defined in 'Data.Complex’
+instance RealFloat a => Floating (Complex a)
+-- Defined in 'Data.Complex’
+instance Foldable Complex -- Defined in 'Data.Complex’
+instance Traversable Complex -- Defined in 'Data.Complex’
+instance Read a => Read (Complex a) -- Defined in 'Data.Complex’
+instance RealFloat a => Fractional (Complex a)
+-- Defined in 'Data.Complex’
+instance RealFloat a => Num (Complex a)
+-- Defined in 'Data.Complex’
+instance Show a => Show (Complex a) -- Defined in 'Data.Complex’
+instance Applicative Complex -- Defined in 'Data.Complex’
+instance Functor Complex -- Defined in 'Data.Complex’
+instance Monad Complex -- Defined in 'Data.Complex’
+instance Eq a => Eq (Complex a) -- Defined in 'Data.Complex’
 \end{haskell}
 \end{intuition}
 
 \section{Kinds}
 
-\csvautotabularray[table centered]
-{number-types.csv}
-[
-	tall,
-	caption = {Types and Typeclasses},
-]
-[
-	row{odd}
-		= {CaribbeanBlue!15},
-	row{1}
-		= {CaribbeanBlue!35,
-			font=\bfseries, preto=\MakeUppercase}
-]
+\begin{center}
+	\rowcolors{2}{gray!10}{white}
+	\begin{tabular}{lccccccccc}
+		\toprule
+		Class      & Bool         & Char         & Complex      & Double       & Float        & Int          & Integer      & Ordering     & Word         \\
+		\midrule
+		Bounded    & \checkmark{} & \checkmark{} &              &              &              & \checkmark{} &              & \checkmark{} & \checkmark{} \\
+		Enum       & \checkmark{} & \checkmark{} &              & \checkmark{} & \checkmark{} & \checkmark{} & \checkmark{} & \checkmark{} & \checkmark{} \\
+		Eq         & \checkmark{} & \checkmark{} & \checkmark{} & \checkmark{} & \checkmark{} & \checkmark{} & \checkmark{} & \checkmark{} & \checkmark{} \\
+		Floating   &              &              & \checkmark{} & \checkmark{} & \checkmark{} &              &              &              &              \\
+		Fractional &              &              & \checkmark{} & \checkmark{} & \checkmark{} &              &              &              &              \\
+		Integral   &              &              &              &              &              & \checkmark{} & \checkmark{} &              & \checkmark{} \\
+		Num        &              &              & \checkmark{} & \checkmark{} & \checkmark{} & \checkmark{} & \checkmark{} &              & \checkmark{} \\
+		Ord        & \checkmark{} & \checkmark{} &              & \checkmark{} & \checkmark{} & \checkmark{} & \checkmark{} & \checkmark{} & \checkmark{} \\
+		Real       &              &              &              & \checkmark{} & \checkmark{} & \checkmark{} & \checkmark{} &              & \checkmark{} \\
+		RealFloat  &              &              & \checkmark{} & \checkmark{} & \checkmark{} &              &              &              &              \\
+		RealFrac   &              &              &              & \checkmark{} & \checkmark{} &              &              &              &              \\
+		\bottomrule
+	\end{tabular}
+\end{center}
 
+\begin{center}
+	\begin{tabular}{lll}
+		\toprule
+		Function            & Type Signature                          & Notes                             \\
+		\midrule
+		\hask{fromIntegral} & \hask{(Integral a, Num b) => a -> b}    & General integral $\to$ numeric    \\
+		\hask{realToFrac}   & \hask{(Real a, Fractional b) => a -> b} & General real $\to$ fractional     \\
+		\hask{toInteger}    & \hask{Integral a => a -> Integer}       & Narrow to \hask{Integer}          \\
+		\hask{toRational}   & \hask{Real a => a -> Rational}          & Narrow to \hask{Rational}         \\
+		\hask{fromEnum}     & \hask{Enum a => a -> Int}               & Enum $\to$ \hask{Int}             \\
+		\hask{toEnum}       & \hask{Enum a => Int -> a}               & \hask{Int} $\to$ Enum             \\
+		\hask{fromInteger}  & \hask{Num a => Integer -> a}            & Class method of \hask{Num}        \\
+		\hask{fromRational} & \hask{Fractional a => Rational -> a}    & Class method of \hask{Fractional} \\
+		\bottomrule
+	\end{tabular}
+\end{center}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzcd}[row sep=3em, column sep=6em]
+		\text{Integral} \arrow[dr, "toInteger"'] \arrow[r, "fromIntegral"]
+		& \text{Num} \\
+		& \text{Integer} \arrow[u, "fromInteger"']
+	\end{tikzcd}
+	\hspace{4em}
+	\begin{tikzcd}[row sep=3em, column sep=6em]
+		\text{Real} \arrow[dr, "toRational"'] \arrow[r, "realToFrac"]
+		& \text{Fractional} \\
+		& \text{Rational} \arrow[u, "fromRational"']
+	\end{tikzcd}
+	\caption{Core Haskell numeric coercions: Integral \(\leftrightarrow\) Num, and Real \(\leftrightarrow\) Fractional.}
+\end{figure}
 
 \begin{figure}[H]
 	\begin{center}

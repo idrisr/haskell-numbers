@@ -13,3 +13,4 @@
 .direnv
 .envrc
 result
+doc/.envrc

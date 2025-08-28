@@ -1,9 +1,34 @@
-{ stdenvNoCC, texliveFull, python312Packages }:
+{ pkgs, stdenvNoCC, python312Packages }:
+let
+  mytex = pkgs.texlive.combine {
+    inherit (pkgs.texlive)
+      biblatex
+      enumitem
+      glossaries
+      latex-bin
+      latexmk
+      minted
+      ninecolors
+      pdfcol
+      rsfs cm-super
+      scheme-small
+      svg
+      tcolorbox
+      tikzfill
+      tikz-cd
+      titlesec
+      transparent
+      upquote
+      xcolor
+      ;
+  };
+in
+
 stdenvNoCC.mkDerivation {
-  name = "template-example-doc";
-  pname = "template-example-doc";
+  name = "haskell numbers";
+  pname = "haskell numbers";
   src = ./src;
-  nativeBuildInputs = [ texliveFull python312Packages.pygments ];
+  nativeBuildInputs = [ mytex python312Packages.pygments pkgs.biber ];
   buildPhase = ''
     latexmk 00-main.tex
   '';
